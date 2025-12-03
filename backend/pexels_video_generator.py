@@ -768,24 +768,30 @@ class PexelsVideoGenerator:
     
     def search_images(self, query: str, count: int = 5) -> List[Dict]:
         """
-        Search for images on Pexels using multi-strategy accurate query matching.
-        Uses full context, key phrases, and primary subjects for best results.
+        Search for images on Pexels using optimized keyword extraction.
+        Focuses on the most relevant keywords for accurate results.
         """
         if not self.api_key:
             return []
             
         try:
-            logger.info(f"🔍 Searching Pexels images for: '{query}'")
+            # Extract clean, focused keywords if query is long
+            if len(query.split()) > 8:
+                optimized_query = extract_keywords_for_pexels(query, max_keywords=6)
+                logger.info(f"🔍 Optimized query: '{query}' → '{optimized_query}'")
+                query = optimized_query
+            else:
+                logger.info(f"🔍 Searching Pexels images for: '{query}'")
             
             url = f"{self.base_url}/v1/search"
             all_images = []
             seen_ids = set()
             
-            # Strategy 1: Full prompt search (most accurate)
-            logger.info("  Strategy 1: Full prompt context search...")
+            # Strategy 1: Direct keyword search (most accurate)
+            logger.info("  Strategy 1: Direct keyword search...")
             params = {
                 "query": query,
-                "per_page": min(count * 2, 80),
+                "per_page": min(count * 3, 80),
                 "orientation": "landscape"
             }
             
@@ -811,14 +817,16 @@ class PexelsVideoGenerator:
             except Exception as e:
                 logger.warning(f"    Full prompt search failed: {e}")
             
-            # Strategy 2: Key phrases search (descriptive context)
+            # Strategy 2: Individual keyword search for variety
             if len(all_images) < count * 1.5:
-                logger.info("  Strategy 2: Key phrases search...")
-                key_phrases = self._extract_key_phrases(query)
-                for phrase in key_phrases[:3]:
+                logger.info("  Strategy 2: Individual keyword search...")
+                keywords = query.split()[:4]  # Take top 4 keywords
+                for keyword in keywords:
+                    if len(keyword) < 3:
+                        continue
                     try:
-                        params['query'] = phrase
-                        params['per_page'] = min(count, 40)
+                        params['query'] = keyword
+                        params['per_page'] = min(count, 30)
                         
                         response = requests.get(url, headers=self.headers, params=params, timeout=15)
                         response.raise_for_status()
@@ -837,18 +845,20 @@ class PexelsVideoGenerator:
                                     "alt": photo.get("alt", ""),
                                     "relevance_score": 2.0
                                 })
-                        logger.info(f"    Phrase '{phrase}': {len(data.get('photos', []))} images")
+                        logger.info(f"    Keyword '{keyword}': {len(data.get('photos', []))} images")
                         
                         if len(all_images) >= count * 2:
                             break
                     except Exception as e:
-                        logger.warning(f"    Phrase search '{phrase}' failed: {e}")
+                        logger.warning(f"    Keyword search '{keyword}' failed: {e}")
             
-            # Strategy 3: Primary subject search (core topic)
+            # Strategy 3: Broader search if still not enough results
             if len(all_images) < count:
-                logger.info("  Strategy 3: Primary subject search...")
-                primary = self._extract_primary_subject(query)
-                if primary:
+                logger.info("  Strategy 3: Broader category search...")
+                # Extract first significant word as fallback
+                words = [w for w in query.split() if len(w) > 3]
+                if words:
+                    primary = words[0]
                     try:
                         params['query'] = primary
                         params['per_page'] = min(count * 2, 50)
@@ -870,9 +880,9 @@ class PexelsVideoGenerator:
                                     "alt": photo.get("alt", ""),
                                     "relevance_score": 1.0
                                 })
-                        logger.info(f"    Primary '{primary}': {len(data.get('photos', []))} images")
+                        logger.info(f"    Category '{primary}': {len(data.get('photos', []))} images")
                     except Exception as e:
-                        logger.warning(f"    Primary subject search failed: {e}")
+                        logger.warning(f"    Broader search failed: {e}")
             
             # Sort by relevance and quality
             all_images.sort(key=lambda x: (

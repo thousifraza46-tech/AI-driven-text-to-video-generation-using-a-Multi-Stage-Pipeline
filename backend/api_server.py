@@ -452,16 +452,18 @@ def generate_images():
         if not data or 'prompt' not in data:
             return jsonify({'error': 'Prompt is required'}), 400
         
-        from pexels_video_generator import PexelsVideoGenerator
+        from pexels_video_generator import PexelsVideoGenerator, extract_keywords_for_pexels
         
         prompt = data['prompt']
         script = data.get('script', '')  # Use script for better context if available
         count = data.get('count', 3)
         
-        # Use script for more accurate search if available
-        search_query = script if script and len(script) > 20 else prompt
+        # Extract clean keywords from prompt for accurate search
+        # Use original prompt for better accuracy, not the full script
+        search_query = extract_keywords_for_pexels(prompt, max_keywords=8)
         
-        print(f"[Images] Searching with {'script context' if script else 'prompt'}: {search_query[:100]}...")
+        print(f"[Images] Original prompt: {prompt[:100]}...")
+        print(f"[Images] Optimized search: '{search_query}'")
         
         generator = PexelsVideoGenerator()
         images = generator.search_images(search_query, count=count)
