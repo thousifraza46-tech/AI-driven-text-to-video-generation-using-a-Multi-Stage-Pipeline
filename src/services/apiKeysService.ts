@@ -37,10 +37,10 @@ class ApiKeysService {
   private baseUrl = API_CONFIG.baseURL;
 
   private constructor() {
-    // Initialize connection on creation
-    this.connect();
-    // Start heartbeat to maintain connection
-    this.startHeartbeat();
+    // Initialize connection on creation - Disabled for deployment
+    // this.connect();
+    // Start heartbeat to maintain connection - Disabled for deployment
+    // this.startHeartbeat();
   }
 
   public static getInstance(): ApiKeysService {

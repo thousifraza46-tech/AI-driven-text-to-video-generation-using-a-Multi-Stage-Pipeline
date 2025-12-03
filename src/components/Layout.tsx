@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import TabAnimations from "./TabAnimations";
-import { ConnectionStatus } from "./ConnectionStatus";
+// import { ConnectionStatus } from "./ConnectionStatus"; // Disabled until backend is deployed
 import { useEffect, useState } from "react";
 
 const Layout = () => {
@@ -89,8 +89,8 @@ const Layout = () => {
         </div>
       </div>
 
-      {/* Connection Status Indicator - Fixed bottom right */}
-      <ConnectionStatus />
+      {/* Connection Status Indicator - Disabled until backend is deployed */}
+      {/* <ConnectionStatus /> */}
     </div>
   );
 };
