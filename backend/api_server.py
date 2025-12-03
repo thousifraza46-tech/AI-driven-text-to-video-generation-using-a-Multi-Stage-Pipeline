@@ -30,9 +30,16 @@ from chatbot_engine import ChatbotEngine
 from huggingface_service import HuggingFaceService
 
 app = Flask(__name__)
+
+# CORS configuration - supports both development and production
+ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', '*')
+if ALLOWED_ORIGINS != '*':
+    # Parse comma-separated origins for production
+    ALLOWED_ORIGINS = [origin.strip() for origin in ALLOWED_ORIGINS.split(',')]
+
 CORS(app, resources={
     r"/api/*": {
-        "origins": "*",
+        "origins": ALLOWED_ORIGINS,
         "methods": ["GET", "POST", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"]
     }
@@ -818,16 +825,24 @@ if __name__ == '__main__':
     import logging
     logging.basicConfig(level=logging.INFO)
     
+    # Get port from environment variable (for production deployment)
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Check if running in production mode
+    is_production = os.environ.get('ENVIRONMENT', 'development') == 'production'
+    
     # Run with Flask threaded server (more compatible)
     print("🚀 Starting Flask server with threading support")
     print("🔄 Connection persistence enabled")
     print("⚡ Enhanced error handling active")
+    print(f"🌍 Environment: {'Production' if is_production else 'Development'}")
+    print(f"📍 Server: http://0.0.0.0:{port}")
     
     try:
         app.run(
-            debug=False, 
+            debug=not is_production, 
             host='0.0.0.0', 
-            port=5000, 
+            port=port, 
             use_reloader=False, 
             threaded=True
         )

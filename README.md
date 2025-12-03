@@ -1,73 +1,188 @@
-# Welcome to your Lovable project
+# AI-Driven Text-to-Video Generation Platform
 
-## Project info
+An intelligent text-to-video generation system using a multi-stage AI pipeline that converts text prompts into complete videos with script generation, image/video sourcing, audio synthesis, and video editing capabilities.
 
-**URL**: https://lovable.dev/projects/ba11f9b1-bbac-4cfd-914b-2822e1a505a4
+## 🌟 Features
 
-## How can I edit this code?
+- **AI Script Generation**: Generate engaging video scripts from simple text prompts
+- **Smart Media Sourcing**: Multi-strategy search for relevant images and videos from Pexels
+- **Audio Synthesis**: Text-to-speech with multiple voice options
+- **Video Editing**: Intuitive drag-and-drop timeline editor
+- **AI Chatbot**: Interactive assistant for guidance and support
+- **Multi-AI Integration**: Powered by Gemini, Groq, HuggingFace, DeepAI, and more
 
-There are several ways of editing your application.
+## 🚀 Quick Start (Local Development)
 
-**Use Lovable**
+### Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ba11f9b1-bbac-4cfd-914b-2822e1a505a4) and start prompting.
+- Node.js 18+ and npm
+- Python 3.10+
+- API Keys (Gemini, Groq, Pexels, HuggingFace, DeepAI, ElevenLabs)
 
-Changes made via Lovable will be committed automatically to this repo.
+### Setup
 
-**Use your preferred IDE**
+1. **Clone the repository**
+```bash
+git clone https://github.com/thousifraza46-tech/AI-driven-text-to-video-generation-using-a-Multi-Stage-Pipeline.git
+cd AI-driven-text-to-video-generation-using-a-Multi-Stage-Pipeline
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. **Install frontend dependencies**
+```bash
+npm install
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. **Setup backend**
+```bash
+cd backend
+pip install -r requirements.txt
+```
 
-Follow these steps:
+4. **Configure API keys**
+```bash
+# Copy template and add your API keys
+cp config.template.py config.py
+# Edit config.py with your actual API keys
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+5. **Run the application**
+```bash
+# Terminal 1: Start backend
+cd backend
+python api_server.py
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Terminal 2: Start frontend
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+6. **Access the application**
+- Frontend: http://localhost:8080
+- Backend API: http://localhost:5000/api/health
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📦 Deployment
 
-**Use GitHub Codespaces**
+### Quick Deploy (5 minutes)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+See **[QUICK_DEPLOY.md](./QUICK_DEPLOY.md)** for fastest deployment steps.
 
-## What technologies are used for this project?
+### Full Deployment Guide
 
-This project is built with:
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for comprehensive deployment instructions including:
+- Railway/Render backend deployment
+- Vercel/Netlify frontend deployment
+- Environment configuration
+- CORS setup
+- Troubleshooting
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Deployment Summary
 
-## How can I deploy this project?
+1. **Backend** → Railway/Render (Python/Flask)
+2. **Frontend** → Vercel/Netlify (React/Vite)
+3. **Configure** → Environment variables for API URLs
+4. **Test** → Health check endpoint and connection status
 
-Simply open [Lovable](https://lovable.dev/projects/ba11f9b1-bbac-4cfd-914b-2822e1a505a4) and click on Share -> Publish.
+## 🛠️ Technologies
 
-## Can I connect a custom domain to my Lovable project?
+### Frontend
+- **Framework**: React 18 + TypeScript
+- **Build Tool**: Vite 5
+- **UI Library**: shadcn/ui + Tailwind CSS
+- **State Management**: Zustand
+- **Routing**: React Router
 
-Yes, you can!
+### Backend
+- **Framework**: Flask (Python)
+- **AI Services**: 
+  - Google Gemini (Script generation)
+  - Groq (Fast LLM)
+  - HuggingFace (Image-to-video)
+  - DeepAI (Image generation)
+  - ElevenLabs (Text-to-speech)
+- **Media API**: Pexels (Images & Videos)
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 📁 Project Structure
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```
+├── src/                    # Frontend React application
+│   ├── components/         # Reusable UI components
+│   ├── pages/             # Page components
+│   ├── services/          # API services
+│   ├── config/            # Configuration files
+│   └── store/             # State management
+├── backend/               # Python Flask backend
+│   ├── api_server.py      # Main API server
+│   ├── chatbot_engine.py  # AI chatbot
+│   ├── script_generator.py# Script generation
+│   ├── pexels_video_generator.py # Media search
+│   └── modules/           # Additional modules
+├── DEPLOYMENT.md          # Comprehensive deployment guide
+├── QUICK_DEPLOY.md        # Quick deployment reference
+└── README.md              # This file
+```
+
+## 🔑 Required API Keys
+
+Get your API keys from:
+- **Gemini**: https://makersuite.google.com/app/apikey
+- **Groq**: https://console.groq.com/keys
+- **Pexels**: https://www.pexels.com/api/
+- **HuggingFace**: https://huggingface.co/settings/tokens
+- **DeepAI**: https://deepai.org/dashboard/profile
+- **ElevenLabs**: https://elevenlabs.io/app/settings/api-keys
+
+## 🧪 Testing
+
+```bash
+# Test backend health
+curl http://localhost:5000/api/health
+
+# Test frontend build
+npm run build
+npm run preview
+```
+
+## 🐛 Troubleshooting
+
+### Backend not connecting after deployment
+
+1. Check environment variables are set correctly
+2. Verify CORS `ALLOWED_ORIGINS` includes frontend URL
+3. Test health endpoint: `https://your-backend.com/api/health`
+4. Check hosting platform logs for errors
+
+### Assets not loading
+
+1. Verify `VITE_ASSETS_URL` in `.env.production`
+2. Check backend serves `/assets` correctly
+3. Ensure file paths use absolute paths
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md#troubleshooting) for more solutions.
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📞 Support
+
+For issues and questions:
+- Check [DEPLOYMENT.md](./DEPLOYMENT.md) for deployment help
+- Review [QUICK_DEPLOY.md](./QUICK_DEPLOY.md) for quick reference
+- Open an issue on GitHub
+
+---
+
+## 🎉 Original Lovable Project Info
+
+**URL**: https://lovable.dev/projects/ba11f9b1-bbac-4cfd-914b-2822e1a505a4
+
+This project was initially created with [Lovable](https://lovable.dev) and has been enhanced with:
+- Full backend API integration
+- Multi-AI service support
+- Advanced media search algorithms
+- Production deployment capabilities
+
+For the original Lovable workflow, see [LOVABLE.md](./LOVABLE.md) (if you want to preserve the original README, rename this section).

@@ -1,0 +1,2 @@
+# Render/Railway deployment configuration
+web: python api_server.py

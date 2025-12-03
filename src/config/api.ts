@@ -1,17 +1,38 @@
 /**
  * API Configuration
  * Centralized configuration for backend API endpoints
+ * Supports both development (proxy) and production (direct) environments
  */
 
-// Use relative URLs in production, absolute URLs in development
+// Environment detection
 const isDevelopment = import.meta.env.DEV;
+const isProduction = import.meta.env.PROD;
+
+// Get API URLs from environment variables or use defaults
+const getBaseURL = (): string => {
+  // In production, use environment variable or default to relative URL
+  if (isProduction) {
+    return import.meta.env.VITE_API_URL || '/api';
+  }
+  // In development, use proxy
+  return '/api';
+};
+
+const getAssetsURL = (): string => {
+  // In production, use environment variable or default to relative URL
+  if (isProduction) {
+    return import.meta.env.VITE_ASSETS_URL || '/assets';
+  }
+  // In development, use proxy
+  return '/assets';
+};
 
 export const API_CONFIG = {
-  // Base URL - use proxy in development, adjust for production
-  baseURL: isDevelopment ? '/api' : '/api',
-  assetsURL: isDevelopment ? '/assets' : '/assets',
+  // Base URLs - automatically configured based on environment
+  baseURL: getBaseURL(),
+  assetsURL: getAssetsURL(),
   
-  // Full backend URL (for direct connections if needed)
+  // Development backend URL (only used in dev mode with proxy)
   backendURL: 'http://localhost:5000',
   
   // Endpoints
